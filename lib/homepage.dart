@@ -3,6 +3,7 @@ import 'package:interactive_journal/journal.dart';
 import 'package:interactive_journal/newentry.dart';
 import 'package:interactive_journal/garden.dart';
 import 'package:interactive_journal/profile.dart';
+import 'package:interactive_journal/hamburger_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -46,25 +47,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
 
-      drawer: Drawer(
-        backgroundColor: const Color(0xFFFCF2E0),
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: const [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Color(0xFFcfc2ab)),
-              child: Text(
-                'Menu',
-                style: TextStyle(fontSize: 24, color: Colors.white),
-              ),
-            ),
-            ListTile(leading: Icon(Icons.home), title: Text('Home')),
-            ListTile(leading: Icon(Icons.settings), title: Text('Settings')),
-            ListTile(leading: Icon(Icons.info), title: Text('About')),
-            ListTile(leading: Icon(Icons.help), title: Text('Help')),
-          ],
-        ),
-      ),
+      drawer: const AppDrawer(),
       body: SafeArea(child: _pages[_selectedIndex]),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color(0xFFFCF2E0),
@@ -115,7 +98,7 @@ class HomePageContent extends StatelessWidget {
         const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Image.asset('assets/sunny_window.png', fit: BoxFit.cover),
+          child: Image.asset('assets/rainy_window.png', fit: BoxFit.cover),
         ),
 
         const SizedBox(height: 60), //gap between window and shelf
@@ -126,7 +109,7 @@ class HomePageContent extends StatelessWidget {
           ],
         ),
 
-        const SizedBox(height: 24), // gap between shelf and streak bit
+        const SizedBox(height: 24), //gap between shelf and streak bit
 
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),

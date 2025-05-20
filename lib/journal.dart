@@ -13,7 +13,7 @@ class JournalPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Title
+              // title
               const Text(
                 'My Journal',
                 style: TextStyle(
@@ -24,7 +24,7 @@ class JournalPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
 
-              // New Entry Button
+              // new entry button
               Container(
                 width: double.infinity,
                 height: 80,
@@ -44,12 +44,12 @@ class JournalPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Mood and Prompts Row
+              // mood and prompts buttons
               Row(
                 children: [
                   Expanded(
                     child: Container(
-                      height: 100,
+                      height: 150,
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFFBF0),
                         borderRadius: BorderRadius.circular(16),
@@ -68,7 +68,7 @@ class JournalPage extends StatelessWidget {
                   const SizedBox(width: 16),
                   Expanded(
                     child: Container(
-                      height: 100,
+                      height: 150,
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFFBF0),
                         borderRadius: BorderRadius.circular(16),
@@ -99,7 +99,7 @@ class JournalPage extends StatelessWidget {
               ),
               const SizedBox(height: 60),
 
-              // No entries fallback
+              // no entries fallback
               const Center(
                 child: Text(
                   'No entries to display',

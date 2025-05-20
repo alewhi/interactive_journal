@@ -28,7 +28,7 @@ class GardenPage extends StatelessWidget {
             Center(
               child: Image.asset(
                 'assets/clouds.png',
-                height: 200,
+                height: 230,
                 fit: BoxFit.contain,
               ),
             ),
@@ -44,7 +44,7 @@ class GardenPage extends StatelessWidget {
             ),
 
             Column(
-              children: [Container(height: 225, color: Color(0xFFE4D7BB))],
+              children: [Container(height: 210, color: Color(0xFFE4D7BB))],
             ),
           ],
         ),
