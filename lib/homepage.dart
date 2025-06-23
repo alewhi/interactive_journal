@@ -4,6 +4,23 @@ import 'package:interactive_journal/newentry.dart';
 import 'package:interactive_journal/garden.dart';
 import 'package:interactive_journal/profile.dart';
 import 'package:interactive_journal/hamburger_drawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
+import 'mood_popup.dart';
+
+Future<bool> shouldShowCheckIn() async {
+  final prefs = await SharedPreferences.getInstance();
+  final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  final lastCheckIn = prefs.getString('lastCheckIn');
+
+  // for testing!!:
+  return true;
+
+  if (lastCheckIn == today) return false;
+
+  await prefs.setString('lastCheckIn', today);
+  return true;
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,14 +31,44 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  late List<Widget> _pages;
 
-  final _pages = const [
-    HomePageContent(),
-    JournalPage(),
-    NewEntryPage(),
-    GardenPage(),
-    ProfilePage(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      const HomePageContent(),
+      const JournalPage(),
+      NewEntryPage(
+        onSave: () {
+          setState(() {
+            _selectedIndex = 1;
+          });
+        },
+      ),
+      const GardenPage(),
+      const ProfilePage(),
+    ];
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (await shouldShowCheckIn()) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder:
+              (_) => MoodCheckInPopup(
+                onMoodSelected: (mood) {
+                  print('Mood selected: $mood');
+                  Navigator.of(context).pop();
+                },
+                onSkip: () {
+                  print('Mood check-in skipped');
+                  Navigator.of(context).pop();
+                },
+              ),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
