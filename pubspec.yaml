@@ -25,8 +25,11 @@ flutter:
     - assets/splash_logo.png
     - assets/sunny_window.png
     - assets/rainy_window.png
+    - assets/night_window.png
+    - assets/rainbow_window.png
     - assets/clouds.png
     - assets/menu_banner.png
+    
 
 flutter_native_splash:
   color: "#fbf1e0"

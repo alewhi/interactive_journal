@@ -14,7 +14,7 @@ Future<bool> shouldShowCheckIn() async {
   final lastCheckIn = prefs.getString('lastCheckIn');
 
   // for testing!!:
-  return true;
+  //return true;
 
   if (lastCheckIn == today) return false;
 
@@ -133,19 +133,20 @@ class HomePageContent extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 10),
-        const Text(
-          'May 18',
-          style: TextStyle(
+        Text(
+          DateFormat('MMMM d').format(DateTime.now()), // e.g. June 23
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w500,
             fontFamily: 'sans-serif',
             color: Color(0xFF695E50),
           ),
         ),
+
         const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Image.asset('assets/rainy_window.png', fit: BoxFit.cover),
+          child: Image.asset('assets/overcast_window.png', fit: BoxFit.cover),
         ),
 
         const SizedBox(height: 60), //gap between window and shelf
