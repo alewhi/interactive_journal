@@ -6,7 +6,7 @@ import 'package:interactive_journal/profile.dart';
 import 'package:interactive_journal/hamburger_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
-import 'mood_popup.dart';
+import 'mood_checkin_page.dart';
 
 Future<bool> shouldShowCheckIn() async {
   final prefs = await SharedPreferences.getInstance();
@@ -14,7 +14,7 @@ Future<bool> shouldShowCheckIn() async {
   final lastCheckIn = prefs.getString('lastCheckIn');
 
   // for testing!!:
-  //return true;
+  return true;
 
   if (lastCheckIn == today) return false;
 
@@ -33,11 +33,13 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   late List<Widget> _pages;
 
+  String windowImage = 'assets/sunny_window.png'; // default weather
+
   @override
   void initState() {
     super.initState();
     _pages = [
-      const HomePageContent(),
+      Container(), //placeholder
       const JournalPage(),
       NewEntryPage(
         onSave: () {
@@ -51,21 +53,26 @@ class _HomePageState extends State<HomePage> {
     ];
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (await shouldShowCheckIn()) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder:
-              (_) => MoodCheckInPopup(
-                onMoodSelected: (mood) {
-                  print('Mood selected: $mood');
-                  Navigator.of(context).pop();
-                },
-                onSkip: () {
-                  print('Mood check-in skipped');
-                  Navigator.of(context).pop();
-                },
-              ),
+        final selectedImage = await Navigator.of(context).push<String>(
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) => const MoodCheckInPage(),
+            transitionsBuilder: (_, animation, __, child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 1),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+          ),
         );
+
+        if (selectedImage != null) {
+          setState(() {
+            windowImage = 'assets/$selectedImage';
+          });
+        }
       }
     });
   }
@@ -95,7 +102,12 @@ class _HomePageState extends State<HomePage> {
       ),
 
       drawer: const AppDrawer(),
-      body: SafeArea(child: _pages[_selectedIndex]),
+      body: SafeArea(
+        child:
+            _selectedIndex == 0
+                ? buildHomePageContent()
+                : _pages[_selectedIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color(0xFFFCF2E0),
         currentIndex: _selectedIndex,
@@ -123,18 +135,13 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
 
-class HomePageContent extends StatelessWidget {
-  const HomePageContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget buildHomePageContent() {
     return Column(
       children: [
         const SizedBox(height: 10),
         Text(
-          DateFormat('MMMM d').format(DateTime.now()), // e.g. June 23
+          DateFormat('MMMM d').format(DateTime.now()),
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w500,
@@ -142,27 +149,23 @@ class HomePageContent extends StatelessWidget {
             color: Color(0xFF695E50),
           ),
         ),
-
         const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Image.asset('assets/overcast_window.png', fit: BoxFit.cover),
+          child: Image.asset(windowImage, fit: BoxFit.cover),
         ),
-
-        const SizedBox(height: 60), //gap between window and shelf
+        const SizedBox(height: 60),
         Column(
           children: [
             Container(height: 55, color: const Color(0xFFcfc2ab)),
             Container(height: 20, color: const Color(0xFFb1a691)),
           ],
         ),
-
-        const SizedBox(height: 24), //gap between shelf and streak bit
-
+        const SizedBox(height: 24),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
           decoration: BoxDecoration(
-            color: Color(0xFFFFFBF0),
+            color: const Color(0xFFFFFBF0),
             borderRadius: BorderRadius.circular(20),
           ),
           child: const Text(
@@ -175,7 +178,6 @@ class HomePageContent extends StatelessWidget {
             ),
           ),
         ),
-
         const SizedBox(height: 10),
       ],
     );
