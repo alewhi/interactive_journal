@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'bug_report.dart';
+import 'package:url_launcher/url_launcher.dart'; // for contact support
 
 class HelpPage extends StatelessWidget {
   const HelpPage({super.key});
@@ -47,8 +49,19 @@ class HelpPage extends StatelessWidget {
                 'support@myjournalapp.com',
                 style: TextStyle(color: Color(0xFF4A4032)),
               ),
-              onTap: () {
-                // email
+              onTap: () async {
+                final Uri emailLaunchUri = Uri(
+                  scheme: 'mailto',
+                  path: 'support@myjournalapp.com',
+                  query: 'subject=App Support Inquiry',
+                );
+                if (await canLaunchUrl(emailLaunchUri)) {
+                  await launchUrl(emailLaunchUri);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Could not launch email app')),
+                  );
+                }
               },
             ),
           ),
@@ -73,11 +86,14 @@ class HelpPage extends StatelessWidget {
                 ),
               ),
               subtitle: const Text(
-                'Let us know if you spot an issue!',
+                'Let us know if you spot a bug!',
                 style: TextStyle(color: Color(0xFF4A4032)),
               ),
               onTap: () {
-                // feedback form??
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const BugReportPage()),
+                );
               },
             ),
           ),

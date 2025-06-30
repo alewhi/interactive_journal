@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 import 'homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'profile_onboarding.dart';
 
-void main() {
-  runApp(const JournalApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final prefs = await SharedPreferences.getInstance();
+  final hasProfile = prefs.getBool('hasProfile') ?? false;
+
+  runApp(JournalApp(hasProfile: hasProfile));
 }
 
 class JournalApp extends StatelessWidget {
-  const JournalApp({super.key});
+  final bool hasProfile;
+
+  const JournalApp({super.key, required this.hasProfile});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: hasProfile ? const HomePage() : const ProfileOnboardingPage(),
+      routes: {'/home': (context) => const HomePage()},
     );
   }
 }

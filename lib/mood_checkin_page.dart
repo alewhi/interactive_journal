@@ -110,7 +110,7 @@ class _MoodCheckInPageState extends State<MoodCheckInPage> {
                         Navigator.pop(context, currentWindowImage);
                       },
               child: const Text(
-                "Submit",
+                "Looks Good!",
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ),

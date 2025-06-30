@@ -16,37 +16,33 @@ class AppDrawer extends StatelessWidget {
         children: [
           Container(
             height: 160,
-            color: const Color(0xFFcfc2ab),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.asset('assets/menu_banner.png', fit: BoxFit.cover),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 32, 16, 16),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Hello!',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 255, 251, 246),
-                      ),
-                    ),
+            decoration: const BoxDecoration(
+              color: Color(0xFFBFAF90),
+              image: DecorationImage(
+                image: AssetImage('assets/menu_banner.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.fromLTRB(16, 40, 16, 16),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Hello!',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF4A4032),
                   ),
                 ),
-              ],
+              ),
             ),
           ),
-
-          const SizedBox(height: 20), //adds a little gap above 'home' text
-
-          ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text(
-              'Home',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
+          const SizedBox(height: 12),
+          _buildDrawerItem(
+            icon: Icons.home,
+            label: 'Home',
+            accentColor: const Color(0xFFA3B18A),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushReplacement(
@@ -55,13 +51,10 @@ class AppDrawer extends StatelessWidget {
               );
             },
           ),
-
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text(
-              'Settings',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
+          _buildDrawerItem(
+            icon: Icons.settings,
+            label: 'Settings',
+            accentColor: const Color(0xFFA3B18A),
             onTap: () {
               Navigator.pop(context);
               Navigator.push(
@@ -70,13 +63,11 @@ class AppDrawer extends StatelessWidget {
               );
             },
           ),
-
-          ListTile(
-            leading: const Icon(Icons.info),
-            title: const Text(
-              'About',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
+          const Divider(color: Color(0xFF695E50), indent: 16, endIndent: 16),
+          _buildDrawerItem(
+            icon: Icons.info,
+            label: 'About',
+            accentColor: const Color(0xFFA3B18A),
             onTap: () {
               Navigator.pop(context);
               Navigator.push(
@@ -85,13 +76,10 @@ class AppDrawer extends StatelessWidget {
               );
             },
           ),
-
-          ListTile(
-            leading: const Icon(Icons.help),
-            title: const Text(
-              'Help',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
+          _buildDrawerItem(
+            icon: Icons.help_outline,
+            label: 'Help',
+            accentColor: const Color(0xFFA3B18A),
             onTap: () {
               Navigator.pop(context);
               Navigator.push(
@@ -101,6 +89,34 @@ class AppDrawer extends StatelessWidget {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDrawerItem({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    required Color accentColor,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Card(
+        color: const Color(0xFFFFFBF0),
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: ListTile(
+          leading: Icon(icon, color: accentColor),
+          title: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 18,
+              color: Color(0xFF4A4032),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          onTap: onTap,
+        ),
       ),
     );
   }
