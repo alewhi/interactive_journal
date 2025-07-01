@@ -66,26 +66,37 @@ class _MoodCheckInPageState extends State<MoodCheckInPage> {
                       onTap: () {
                         setState(() {
                           selectedMood = mood;
-                          currentWindowImage = moods[mood]!; // update preview
+                          currentWindowImage = moods[mood]!;
                         });
                       },
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        width: 55,
+                        height: 55,
+                        margin: const EdgeInsets.symmetric(horizontal: 6),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
                             color:
                                 isSelected
                                     ? const Color(0xFF695E50)
-                                    : Colors.grey,
-                            width: 3,
+                                    : const Color.fromARGB(255, 151, 137, 120),
+                            width: 2,
                           ),
-                          color: isSelected ? const Color(0xFFEADFC8) : null,
+                          color:
+                              isSelected
+                                  ? const Color(0xFFEADFC8)
+                                  : const Color(0xFFFFFBF0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
                         ),
                         alignment: Alignment.center,
-                        child: Text(mood, style: const TextStyle(fontSize: 24)),
+                        child: Text(mood, style: const TextStyle(fontSize: 22)),
                       ),
                     );
                   }).toList(),

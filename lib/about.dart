@@ -6,20 +6,29 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFCF2E0),
+      backgroundColor: const Color.fromRGBO(252, 242, 224, 1),
       appBar: AppBar(
         backgroundColor: const Color(0xFFFCF2E0),
         elevation: 0,
         scrolledUnderElevation: 0,
         iconTheme: const IconThemeData(color: Color(0xFF695E50), size: 36),
+        title: const Text(
+          'About',
+          style: TextStyle(
+            color: Color(0xFF695E50),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
+
       body: Stack(
         children: [
           ListView(
             padding: const EdgeInsets.all(24.0),
             children: [
-              Center(child: Image.asset('assets/app_logo.png', height: 100)),
-              const SizedBox(height: 20),
+              Center(child: Image.asset('assets/app_logo.png', height: 150)),
+              const SizedBox(height: 10),
               const Center(
                 child: Text(
                   'About ------',
@@ -31,10 +40,35 @@ class AboutPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                '(...) is an interactive journaling app that helps you build mindful habits while growing your own peaceful garden. \n\nCheck in daily, nurture your plants, and discover your personal growth.',
-                style: TextStyle(fontSize: 16, color: Color(0xFF4A4032)),
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFBF0),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(16),
+                child: const Text(
+                  '[name] is a peaceful, interactive journaling experience designed to help you reflect on your thoughts, nurture your mental well-being, and grow over time. Each entry you make helps your personal garden flourish, blending mindful habits with fun.\n\n'
+                  'Whether you’re writing about your day, tracking your mood, or simply capturing moments, [name] provides a safe, private space to explore your emotions and celebrate your growth.\n\n'
+                  '• Private & Secure: All your journal entries are stored on your own device.\n'
+                  '• No account needed: Focus on your personal journey without worrying about logins or social sharing.\n'
+                  '• Grow your garden: Check in daily to see your virtual garden grow.\n'
+                  '• Simple & calming design: Built to encourage peaceful, mindful reflection.\n\n'
+                  'If you ever need help, visit the Help section or get in touch with us at (email)).',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF4A4032),
+                    height: 1.5,
+                  ),
+                ),
               ),
+
               const SizedBox(height: 24),
               Container(
                 decoration: BoxDecoration(
@@ -106,10 +140,7 @@ class AboutPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 8),
-                    Text(
-                      'support@myjournalapp.com',
-                      style: TextStyle(color: Color(0xFF4A4032)),
-                    ),
+                    Text('email', style: TextStyle(color: Color(0xFF4A4032))),
                   ],
                 ),
               ),

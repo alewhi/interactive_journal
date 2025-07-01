@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:interactive_journal/journal_entry.dart';
 import 'package:interactive_journal/journal_data.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class NewEntryPage extends StatefulWidget {
   final VoidCallback onSave;
@@ -14,6 +17,8 @@ class NewEntryPage extends StatefulWidget {
 class _NewEntryPageState extends State<NewEntryPage> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
+  List<File> _selectedImages = [];
+  Color _selectedColor = const Color(0xFFFCF2E0); // default
 
   void _saveEntry() {
     final title = _titleController.text.trim();
@@ -37,51 +42,269 @@ class _NewEntryPageState extends State<NewEntryPage> {
     widget.onSave(); // trigger the tab switch
   }
 
+  Widget _buildColorChoice(Color color) {
+    final isSelected = _selectedColor == color;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedColor = color;
+        });
+      },
+      child: Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: isSelected ? const Color(0xFF695E50) : Colors.transparent,
+            width: 2,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImages.add(File(pickedFile.path));
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final formattedDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
     return Scaffold(
-      backgroundColor: const Color(0xFFFCF2E0),
+      backgroundColor: _selectedColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFCF2E0),
+        backgroundColor: _selectedColor,
         elevation: 0,
+        scrolledUnderElevation: 0,
         title: const Text(
-          'New Journal Entry',
-          style: TextStyle(color: Color(0xFF695E50)),
+          'New Entry',
+          style: TextStyle(
+            color: Color(0xFF695E50),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        iconTheme: const IconThemeData(color: Color(0xFF695E50)),
+        iconTheme: const IconThemeData(color: Color(0xFF695E50), size: 36),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                labelStyle: TextStyle(color: Color(0xFF695E50)),
-                border: OutlineInputBorder(),
-              ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    height: 48,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFFBF0),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      '$formattedDate',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Color(0xFF695E50),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      // pick prompt?
+                    },
+                    child: Container(
+                      height: 48,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFFBF0),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Text(
+                        'Prompts',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Color(0xFF695E50),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
+
             const SizedBox(height: 20),
-            TextField(
-              controller: _contentController,
-              maxLines: 8,
-              decoration: const InputDecoration(
-                labelText: 'Content',
-                labelStyle: TextStyle(color: Color(0xFF695E50)),
-                border: OutlineInputBorder(),
+            Text(
+              'Choose a Background Colour:',
+              style: TextStyle(
+                fontSize: 16,
+                color: Color(0xFF695E50),
+                fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 12,
+              children: [
+                _buildColorChoice(const Color.fromRGBO(252, 242, 224, 1)),
+                _buildColorChoice(const Color.fromARGB(255, 253, 213, 226)),
+                _buildColorChoice(const Color.fromARGB(255, 206, 226, 243)),
+                _buildColorChoice(const Color.fromARGB(255, 199, 221, 199)),
+                _buildColorChoice(const Color.fromARGB(255, 244, 218, 248)),
+              ],
+            ),
+
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFFBF0),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(12),
+              child: TextField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                  labelStyle: TextStyle(color: Color(0xFF695E50)),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFFBF0),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(12),
+              child: TextField(
+                controller: _contentController,
+                maxLines: 10,
+                decoration: const InputDecoration(
+                  hintText: 'Write Something...',
+                  hintStyle: TextStyle(color: Color(0xFF695E50)),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            // image picker
+            const SizedBox(height: 20),
+            Text(
+              'Attached Images:',
+              style: TextStyle(
+                fontSize: 16,
+                color: Color(0xFF695E50),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 80,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  // plus button
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFFBF0),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: const Color(0xFF695E50)),
+                      ),
+                      child: const Icon(
+                        Icons.add,
+                        color: Color(0xFF695E50),
+                        size: 36,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // img thumbnails
+                  ..._selectedImages.map(
+                    (file) => Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.file(
+                          file,
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF695E50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 16),
               ),
               onPressed: _saveEntry,
               child: const Text(
                 'Save Entry',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ),
           ],

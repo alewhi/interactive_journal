@@ -111,7 +111,33 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color(0xFFFCF2E0),
         currentIndex: _selectedIndex,
-        onTap: (i) => setState(() => _selectedIndex = i),
+        onTap: (i) async {
+          if (i == 2) {
+            final result = await Navigator.of(context).push(
+              PageRouteBuilder(
+                pageBuilder:
+                    (_, __, ___) => NewEntryPage(
+                      onSave: () {
+                        Navigator.of(context).pop(); // close after save
+                      },
+                    ),
+                transitionsBuilder: (_, animation, __, child) {
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, 1),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  );
+                },
+              ),
+            );
+            // dont change selected tab
+            return;
+          }
+          setState(() => _selectedIndex = i);
+        },
+
         selectedItemColor: const Color(0xFF6D5D4B),
         unselectedItemColor: Colors.grey[600],
         selectedIconTheme: const IconThemeData(size: 39),
@@ -163,19 +189,35 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(height: 24),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          width: 200,
+          margin: const EdgeInsets.symmetric(horizontal: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           decoration: BoxDecoration(
             color: const Color(0xFFFFFBF0),
+            border: Border.all(color: const Color(0xFFE4D7BB), width: 1.5),
             borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6,
+                offset: const Offset(0, 3),
+              ),
+            ],
           ),
-          child: const Text(
-            'Streak: 0 days',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'sans-serif',
-              color: Color(0xFF695E50),
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.local_fire_department, color: Color(0xFF695E50)),
+              const SizedBox(width: 8),
+              const Text(
+                'Streak: 0 days',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF695E50),
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 10),

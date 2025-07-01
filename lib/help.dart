@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'bug_report.dart';
+import 'terms_privacy.dart';
 import 'package:url_launcher/url_launcher.dart'; // for contact support
 
 class HelpPage extends StatelessWidget {
@@ -12,117 +13,65 @@ class HelpPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFFFCF2E0),
         elevation: 0,
+        scrolledUnderElevation: 0,
         iconTheme: const IconThemeData(color: Color(0xFF695E50), size: 36),
+        title: const Text(
+          'Help & Support',
+          style: TextStyle(
+            color: Color(0xFF695E50),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(24.0),
         children: [
-          const Text(
-            'Help & Support',
-            style: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF695E50),
-            ),
-          ),
-          const SizedBox(height: 24),
-          // contact box
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              image: const DecorationImage(
-                image: AssetImage('assets/help_boxes.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: ListTile(
-              leading: const Icon(Icons.email, color: Color(0xFF695E50)),
-              title: const Text(
-                'Contact Support',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF695E50),
-                ),
-              ),
-              subtitle: const Text(
-                'support@myjournalapp.com',
-                style: TextStyle(color: Color(0xFF4A4032)),
-              ),
-              onTap: () async {
-                final Uri emailLaunchUri = Uri(
-                  scheme: 'mailto',
-                  path: 'support@myjournalapp.com',
-                  query: 'subject=App Support Inquiry',
+          _helpCard(
+            context,
+            icon: Icons.email,
+            title: 'Contact Support',
+            subtitle: 'support@myjournalapp.com',
+            onTap: () async {
+              final Uri emailLaunchUri = Uri(
+                scheme: 'mailto',
+                path: 'support@myjournalapp.com',
+                query: 'subject=App Support Inquiry',
+              );
+              if (await canLaunchUrl(emailLaunchUri)) {
+                await launchUrl(emailLaunchUri);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Could not launch email app')),
                 );
-                if (await canLaunchUrl(emailLaunchUri)) {
-                  await launchUrl(emailLaunchUri);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Could not launch email app')),
-                  );
-                }
-              },
-            ),
+              }
+            },
           ),
-          const SizedBox(height: 20),
-          // report problem box
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              image: const DecorationImage(
-                image: AssetImage('assets/help_boxes.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: ListTile(
-              leading: const Icon(Icons.bug_report, color: Color(0xFF695E50)),
-              title: const Text(
-                'Report a Problem',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF695E50),
-                ),
-              ),
-              subtitle: const Text(
-                'Let us know if you spot a bug!',
-                style: TextStyle(color: Color(0xFF4A4032)),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const BugReportPage()),
-                );
-              },
-            ),
+          const SizedBox(height: 16),
+          _helpCard(
+            context,
+            icon: Icons.bug_report,
+            title: 'Report a Problem',
+            subtitle: 'Tell us if something went wrong',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const BugReportPage()),
+              );
+            },
           ),
-          const SizedBox(height: 20),
-          // terms/privacy box
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              image: const DecorationImage(
-                image: AssetImage('assets/help_boxes.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: ListTile(
-              leading: const Icon(Icons.privacy_tip, color: Color(0xFF695E50)),
-              title: const Text(
-                'Terms & Privacy',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF695E50),
-                ),
-              ),
-              subtitle: const Text(
-                'Review our app policies',
-                style: TextStyle(color: Color(0xFF4A4032)),
-              ),
-              onTap: () {},
-            ),
+          const SizedBox(height: 16),
+          _helpCard(
+            context,
+            icon: Icons.privacy_tip,
+            title: 'Terms & Privacy',
+            subtitle: 'Review our app policies',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TermsPrivacyPage()),
+              );
+            },
           ),
           const SizedBox(height: 30),
           const Text(
@@ -134,68 +83,94 @@ class HelpPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          // FAQ accordion
-          ExpansionTile(
-            title: const Text(
-              'How does mood tracking work?',
-              style: TextStyle(color: Color(0xFF695E50)),
-            ),
-            children: const [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'add answer.............',
-                  style: TextStyle(color: Color(0xFF4A4032)),
-                ),
-              ),
-            ],
+          _styledExpansion(
+            question: 'How do I create a new entry?',
+            answer:
+                'Tap the plus (+) button in the bottom navigation to start a new journal entry. You can add a title and write freely!',
           ),
-          ExpansionTile(
-            title: const Text(
-              'Can I recover journal entries?',
-              style: TextStyle(color: Color(0xFF695E50)),
-            ),
-            children: const [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Currently there is no recovery, so please back up anything important manually.',
-                  style: TextStyle(color: Color(0xFF4A4032)),
-                ),
-              ),
-            ],
+          _styledExpansion(
+            question: 'Where is my data stored?',
+            answer:
+                'All your journal entries are stored locally on your device and are never uploaded to a server.',
           ),
-          ExpansionTile(
-            title: const Text(
-              'How do I grow plants?',
-              style: TextStyle(color: Color(0xFF695E50)),
-            ),
-            children: const [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'When you check in with your mood and journal......',
-                  style: TextStyle(color: Color(0xFF4A4032)),
-                ),
-              ),
-            ],
+          _styledExpansion(
+            question: 'Can I back up my journals?',
+            answer:
+                'Currently you will need to manually back up your data if you wish to transfer to a new device.',
           ),
-          ExpansionTile(
-            title: const Text(
-              'Is my data safe?',
-              style: TextStyle(color: Color(0xFF695E50)),
-            ),
-            children: const [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Your data is only saved on your device right now.',
-                  style: TextStyle(color: Color(0xFF4A4032)),
-                ),
-              ),
-            ],
+          _styledExpansion(
+            question: 'What is the garden feature for?',
+            answer:
+                'The garden grows and evolves based on your mood check-ins and journaling streaks, as a fun way to motivate daily reflection.',
           ),
           const SizedBox(height: 40),
+        ],
+      ),
+    );
+  }
+
+  ///
+  Widget _helpCard(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        image: const DecorationImage(
+          image: AssetImage('assets/help_boxes.png'),
+          fit: BoxFit.cover,
+        ),
+        boxShadow: [
+          BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4)),
+        ],
+      ),
+      child: ListTile(
+        leading: Icon(icon, color: const Color(0xFF695E50)),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF695E50),
+          ),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: const TextStyle(color: Color(0xFF4A4032)),
+        ),
+        onTap: onTap,
+      ),
+    );
+  }
+
+  /// reusable styled accordion for FAQs
+  Widget _styledExpansion({required String question, required String answer}) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 2,
+      child: ExpansionTile(
+        collapsedIconColor: const Color(0xFF695E50),
+        iconColor: const Color(0xFF695E50),
+        title: Text(
+          question,
+          style: const TextStyle(
+            color: Color(0xFF695E50),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Text(
+              answer,
+              style: const TextStyle(color: Color(0xFF4A4032)),
+            ),
+          ),
         ],
       ),
     );

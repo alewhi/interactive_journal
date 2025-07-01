@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:interactive_journal/newentry.dart';
 
 class JournalPage extends StatelessWidget {
   const JournalPage({super.key});
@@ -25,23 +26,47 @@ class JournalPage extends StatelessWidget {
               const SizedBox(height: 24),
 
               // new entry button
-              Container(
-                width: double.infinity,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFFBF0),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                alignment: Alignment.center,
-                child: const Text(
-                  'New Entry',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF695E50),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      pageBuilder:
+                          (_, __, ___) => NewEntryPage(
+                            onSave: () {
+                              Navigator.of(context).pop(); // close after save
+                            },
+                          ),
+                      transitionsBuilder: (_, animation, __, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(0, 1), // slide from bottom
+                            end: Offset.zero,
+                          ).animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFBF0),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'New Entry',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF695E50),
+                    ),
                   ),
                 ),
               ),
+
               const SizedBox(height: 20),
 
               // mood and prompts buttons

@@ -40,6 +40,18 @@ class _SettingsPageState extends State<SettingsPage> {
     ).showSnackBar(const SnackBar(content: Text('All data cleared')));
   }
 
+  void exportData() {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Data exported (demo only)')));
+  }
+
+  void importData() {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Data imported (demo only)')));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,29 +60,42 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: const Color(0xFFFCF2E0),
         elevation: 0,
         iconTheme: const IconThemeData(color: Color(0xFF695E50), size: 36),
+        title: const Text(
+          'Settings',
+          style: TextStyle(
+            color: Color(0xFF695E50),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: ListView(
           children: [
-            const Text(
-              'Settings',
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF695E50),
-              ),
-            ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
+
+            //reminders
             Container(
               decoration: BoxDecoration(
                 color: const Color(0xFFFFFBF0),
                 borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    offset: Offset(0, 3),
+                  ),
+                ],
               ),
               child: SwitchListTile(
+                activeColor: const Color(0xFF695E50),
                 title: const Text(
                   'Daily Reminders',
-                  style: TextStyle(color: Color(0xFF695E50)),
+                  style: TextStyle(
+                    color: Color(0xFF695E50),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 value: remindersEnabled,
                 onChanged: toggleReminders,
@@ -78,38 +103,127 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
 
             const SizedBox(height: 20),
+
+            //version
             Container(
               decoration: BoxDecoration(
                 color: const Color(0xFFFFFBF0),
                 borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    offset: Offset(0, 3),
+                  ),
+                ],
               ),
-              child: ListTile(
-                leading: const Icon(Icons.info, color: Color(0xFF695E50)),
-                title: const Text(
+              child: const ListTile(
+                leading: Icon(Icons.info, color: Color(0xFF695E50)),
+                title: Text(
                   'App Version',
-                  style: TextStyle(color: Color(0xFF695E50)),
+                  style: TextStyle(
+                    color: Color(0xFF695E50),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                subtitle: const Text(
+                subtitle: Text(
                   '1.0.0',
                   style: TextStyle(color: Color(0xFF4A4032)),
                 ),
               ),
             ),
+
             const SizedBox(height: 20),
+
+            // clear data
             Container(
               decoration: BoxDecoration(
                 color: const Color(0xFFFFFBF0),
                 borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    offset: Offset(0, 3),
+                  ),
+                ],
               ),
               child: ListTile(
-                leading: const Icon(Icons.delete, color: Color(0xFF695E50)),
+                leading: const Icon(
+                  Icons.delete_forever,
+                  color: Color(0xFF695E50),
+                ),
                 title: const Text(
                   'Clear All Data',
-                  style: TextStyle(color: Color(0xFF695E50)),
+                  style: TextStyle(
+                    color: Color(0xFF695E50),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 onTap: clearData,
               ),
             ),
+
+            const SizedBox(height: 20),
+
+            //export data
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFFBF0),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.upload_file,
+                  color: Color(0xFF695E50),
+                ),
+                title: const Text(
+                  'Export Data',
+                  style: TextStyle(
+                    color: Color(0xFF695E50),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                onTap: exportData,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            //import data
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFFBF0),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: ListTile(
+                leading: const Icon(Icons.download, color: Color(0xFF695E50)),
+                title: const Text(
+                  'Import Data',
+                  style: TextStyle(
+                    color: Color(0xFF695E50),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                onTap: importData,
+              ),
+            ),
+
+            const SizedBox(height: 30),
           ],
         ),
       ),
