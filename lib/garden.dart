@@ -24,7 +24,7 @@ class GardenPage extends StatelessWidget {
               ),
             ),
 
-            // clouds image under title
+            // clouds
             Center(
               child: Image.asset(
                 'assets/clouds.png',
@@ -33,7 +33,7 @@ class GardenPage extends StatelessWidget {
               ),
             ),
 
-            // expanded content space for future plant widgets
+            // space for plants
             Expanded(
               child: Center(
                 child: Text(

@@ -34,7 +34,7 @@ class _BugReportPageState extends State<BugReportPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3E8E1), // warm terracotta
+      backgroundColor: const Color(0xFFF3E8E1),
       appBar: AppBar(
         backgroundColor: const Color(0xFFF3E8E1),
         elevation: 0,

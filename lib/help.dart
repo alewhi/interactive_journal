@@ -147,7 +147,7 @@ class HelpPage extends StatelessWidget {
     );
   }
 
-  /// reusable styled accordion for FAQs
+  /// reusable accordion for FAQs
   Widget _styledExpansion({required String question, required String answer}) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),

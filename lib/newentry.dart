@@ -4,6 +4,7 @@ import 'package:interactive_journal/journal_data.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:hive/hive.dart';
 
 class NewEntryPage extends StatefulWidget {
   final VoidCallback onSave;
@@ -20,7 +21,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
   List<File> _selectedImages = [];
   Color _selectedColor = const Color(0xFFFCF2E0); // default
 
-  void _saveEntry() {
+  void _saveEntry() async {
     final title = _titleController.text.trim();
     final content = _contentController.text.trim();
 
@@ -31,15 +32,17 @@ class _NewEntryPageState extends State<NewEntryPage> {
       return;
     }
 
+    final box = Hive.box<JournalEntry>('journalEntries');
     final newEntry = JournalEntry(
       title: title,
       content: content,
       date: DateTime.now(),
+      color: _selectedColor.value,
     );
 
-    journalEntries.add(newEntry);
+    await box.add(newEntry);
 
-    widget.onSave(); // trigger the tab switch
+    widget.onSave();
   }
 
   Widget _buildColorChoice(Color color) {
@@ -140,7 +143,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                   flex: 1,
                   child: GestureDetector(
                     onTap: () {
-                      // pick prompt?
+                      // pick prompt??
                     },
                     child: Container(
                       height: 48,
@@ -183,11 +186,11 @@ class _NewEntryPageState extends State<NewEntryPage> {
             Wrap(
               spacing: 12,
               children: [
-                _buildColorChoice(const Color.fromRGBO(252, 242, 224, 1)),
-                _buildColorChoice(const Color.fromARGB(255, 253, 213, 226)),
-                _buildColorChoice(const Color.fromARGB(255, 206, 226, 243)),
-                _buildColorChoice(const Color.fromARGB(255, 199, 221, 199)),
-                _buildColorChoice(const Color.fromARGB(255, 244, 218, 248)),
+                _buildColorChoice(const Color.fromARGB(255, 250, 228, 186)),
+                _buildColorChoice(const Color.fromARGB(255, 255, 191, 211)),
+                _buildColorChoice(const Color.fromARGB(255, 184, 222, 255)),
+                _buildColorChoice(const Color.fromARGB(255, 199, 233, 199)),
+                _buildColorChoice(const Color.fromARGB(255, 223, 179, 229)),
               ],
             ),
 

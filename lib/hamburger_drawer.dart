@@ -30,9 +30,9 @@ class AppDrawer extends StatelessWidget {
                 child: Text(
                   'Hello!',
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF4A4032),
+                    color: Color.fromARGB(255, 61, 52, 41),
                   ),
                 ),
               ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:interactive_journal/journal_entry.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -35,9 +37,13 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> clearData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('All data cleared')));
+
+    final box = Hive.box<JournalEntry>('journalEntries');
+    await box.clear();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('All app data and journal entries cleared')),
+    );
   }
 
   void exportData() {
