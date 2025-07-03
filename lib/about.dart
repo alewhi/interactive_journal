@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//about screen w description, version and creds
+
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
 
@@ -41,6 +43,7 @@ class AboutPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Container(
+                //about desc stuff
                 decoration: BoxDecoration(
                   color: Color(0xFFFFFBF0),
                   borderRadius: BorderRadius.circular(16),
@@ -71,6 +74,7 @@ class AboutPage extends StatelessWidget {
 
               const SizedBox(height: 24),
               Container(
+                //credits
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFFBF0),
                   borderRadius: BorderRadius.circular(16),
@@ -97,6 +101,7 @@ class AboutPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Container(
+                //version
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFFBF0),
                   borderRadius: BorderRadius.circular(16),
@@ -123,6 +128,7 @@ class AboutPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Container(
+                //contact
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFFBF0),
                   borderRadius: BorderRadius.circular(16),
@@ -148,6 +154,7 @@ class AboutPage extends StatelessWidget {
             ],
           ),
           Align(
+            //footer image
             alignment: Alignment.bottomCenter,
             child: Image.asset(
               'assets/about_footer.png',

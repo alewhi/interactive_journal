@@ -6,45 +6,71 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:hive/hive.dart';
 
+//create or edit entry page
 class NewEntryPage extends StatefulWidget {
-  final VoidCallback onSave;
+  final JournalEntry? existingEntry; //if editing
+  final VoidCallback? onSave; //callback
 
-  const NewEntryPage({super.key, required this.onSave});
+  const NewEntryPage({super.key, this.existingEntry, this.onSave});
 
   @override
   State<NewEntryPage> createState() => _NewEntryPageState();
 }
 
 class _NewEntryPageState extends State<NewEntryPage> {
-  final _titleController = TextEditingController();
-  final _contentController = TextEditingController();
   List<File> _selectedImages = [];
-  Color _selectedColor = const Color(0xFFFCF2E0); // default
+  Color _selectedColor = const Color(0xFFFCF2E0); //default
+  late TextEditingController _titleController;
+  late TextEditingController _contentController;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(
+      text: widget.existingEntry?.title ?? '',
+    );
+    _contentController = TextEditingController(
+      text: widget.existingEntry?.content ?? '',
+    );
+  }
 
   void _saveEntry() async {
+    //save to hive
+    final box = Hive.box<JournalEntry>('journalEntries');
     final title = _titleController.text.trim();
     final content = _contentController.text.trim();
+    final color = 0xFFEADFC8; //fallback colour
 
     if (title.isEmpty || content.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter both a title and content')),
+        //validation
+        const SnackBar(content: Text('Please fill in all fields')),
       );
       return;
     }
 
-    final box = Hive.box<JournalEntry>('journalEntries');
-    final newEntry = JournalEntry(
-      title: title,
-      content: content,
-      date: DateTime.now(),
-      color: _selectedColor.value,
-    );
+    if (widget.existingEntry != null) {
+      //editing an existing one
+      widget.existingEntry!
+        ..title = title
+        ..content = content
+        ..save();
+    } else {
+      //creating new
+      final entry = JournalEntry(
+        title: title,
+        content: content,
+        date: DateTime.now(),
+        color: color,
+      );
+      box.add(entry);
+    }
 
-    await box.add(newEntry);
-
-    widget.onSave();
+    widget.onSave?.call();
+    Navigator.pop(context);
   }
 
+  //choose colour circle options
   Widget _buildColorChoice(Color color) {
     final isSelected = _selectedColor == color;
     return GestureDetector(
@@ -76,6 +102,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
   }
 
   Future<void> _pickImage() async {
+    //pick img from camera roll
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
@@ -143,7 +170,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                   flex: 1,
                   child: GestureDetector(
                     onTap: () {
-                      // pick prompt??
+                      //pick prompt??
                     },
                     child: Container(
                       height: 48,
@@ -195,6 +222,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
             ),
 
             Container(
+              //title field
               margin: const EdgeInsets.only(top: 20),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFFBF0),
@@ -218,6 +246,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
               ),
             ),
             Container(
+              //content field
               margin: const EdgeInsets.only(top: 20),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFFBF0),
@@ -241,7 +270,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                 ),
               ),
             ),
-            // image picker
+            //image picker
             const SizedBox(height: 20),
             Text(
               'Attached Images:',
@@ -257,7 +286,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  // plus button
+                  //plus button
                   GestureDetector(
                     onTap: _pickImage,
                     child: Container(
@@ -275,7 +304,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  // img thumbnails
+                  //img thumbnails
                   ..._selectedImages.map(
                     (file) => Padding(
                       padding: const EdgeInsets.only(right: 8),
@@ -297,6 +326,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
             const SizedBox(height: 30),
 
             ElevatedButton(
+              //save button
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF695E50),
                 shape: RoundedRectangleBorder(

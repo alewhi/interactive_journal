@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//mood/weather checkin
 class MoodCheckInPage extends StatefulWidget {
   const MoodCheckInPage({super.key});
 
@@ -8,7 +9,7 @@ class MoodCheckInPage extends StatefulWidget {
 }
 
 class _MoodCheckInPageState extends State<MoodCheckInPage> {
-  String? selectedMood;
+  String? selectedMood; //current emoji
 
   final moods = {
     '☀️': 'sunny_window.png',
@@ -18,7 +19,7 @@ class _MoodCheckInPageState extends State<MoodCheckInPage> {
     '🌈': 'rainbow_window.png',
   };
 
-  String currentWindowImage = 'sunny_window.png';
+  String currentWindowImage = 'sunny_window.png'; //default mood
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +48,7 @@ class _MoodCheckInPageState extends State<MoodCheckInPage> {
             ),
             const SizedBox(height: 30),
             AnimatedSwitcher(
+              //shows window image matching weather emoji
               duration: const Duration(milliseconds: 400),
               child: Image.asset(
                 'assets/$currentWindowImage',
@@ -71,8 +73,8 @@ class _MoodCheckInPageState extends State<MoodCheckInPage> {
                       },
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
-                        width: 55,
-                        height: 55,
+                        width: 45,
+                        height: 45,
                         margin: const EdgeInsets.symmetric(horizontal: 6),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -104,6 +106,7 @@ class _MoodCheckInPageState extends State<MoodCheckInPage> {
 
             const SizedBox(height: 30),
             ElevatedButton(
+              //confirm button
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF695E50),
                 shape: RoundedRectangleBorder(

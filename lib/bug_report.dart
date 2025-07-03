@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//reporting bugs page
 class BugReportPage extends StatefulWidget {
   const BugReportPage({super.key});
 
@@ -12,6 +13,7 @@ class _BugReportPageState extends State<BugReportPage> {
   final _descController = TextEditingController();
 
   void _submitBug() {
+    //submit form
     final title = _titleController.text.trim();
     final desc = _descController.text.trim();
 
@@ -22,11 +24,11 @@ class _BugReportPageState extends State<BugReportPage> {
       return;
     }
 
-    debugPrint('Bug reported:\n$title\n$desc');
+    debugPrint('Bug reported:\n$title\n$desc'); //print in console
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Bug report submitted (demo only)')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Bug report submitted')));
 
     Navigator.pop(context);
   }
@@ -53,6 +55,7 @@ class _BugReportPageState extends State<BugReportPage> {
         children: [
           const SizedBox(height: 10),
           Center(
+            //bug icon
             child: Icon(Icons.bug_report, size: 60, color: Color(0xFF695E50)),
           ),
           const SizedBox(height: 16),
@@ -68,6 +71,7 @@ class _BugReportPageState extends State<BugReportPage> {
           ),
           const SizedBox(height: 24),
           Container(
+            //form
             decoration: BoxDecoration(
               color: const Color(0xFFFFFDF8),
               borderRadius: BorderRadius.circular(20),

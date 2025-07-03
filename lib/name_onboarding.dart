@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'avatar_onboarding.dart';
 
+//onboarding page to get name
 class NameOnboardingPage extends StatefulWidget {
   const NameOnboardingPage({super.key});
 
@@ -9,12 +10,14 @@ class NameOnboardingPage extends StatefulWidget {
 }
 
 class _NameOnboardingPageState extends State<NameOnboardingPage> {
-  final _nameController = TextEditingController();
+  final _nameController = TextEditingController(); //text input controller
 
   void _proceedToAvatar() {
+    //validate and move to avatar page
     final name = _nameController.text.trim();
     if (name.isEmpty) {
       ScaffoldMessenger.of(
+        //warning
         context,
       ).showSnackBar(const SnackBar(content: Text('Please enter your name')));
       return;
@@ -51,6 +54,7 @@ class _NameOnboardingPageState extends State<NameOnboardingPage> {
               ),
               const SizedBox(height: 40),
               Container(
+                //input field
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFFBF0),
                   borderRadius: BorderRadius.circular(20),
@@ -84,6 +88,7 @@ class _NameOnboardingPageState extends State<NameOnboardingPage> {
               ),
               const SizedBox(height: 50),
               ElevatedButton(
+                //next button
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF695E50),
                   shape: RoundedRectangleBorder(

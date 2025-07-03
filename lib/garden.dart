@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//shows garden with plants added
 class GardenPage extends StatelessWidget {
   const GardenPage({super.key});
 
@@ -24,7 +25,7 @@ class GardenPage extends StatelessWidget {
               ),
             ),
 
-            // clouds
+            // clouds background img
             Center(
               child: Image.asset(
                 'assets/clouds.png',

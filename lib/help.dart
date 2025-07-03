@@ -3,6 +3,7 @@ import 'bug_report.dart';
 import 'terms_privacy.dart';
 import 'package:url_launcher/url_launcher.dart'; // for contact support
 
+//help page w faqs
 class HelpPage extends StatelessWidget {
   const HelpPage({super.key});
 
@@ -103,13 +104,19 @@ class HelpPage extends StatelessWidget {
             answer:
                 'The garden grows and evolves based on your mood check-ins and journaling streaks, as a fun way to motivate daily reflection.',
           ),
+          _styledExpansion(
+            question: 'How do streaks work?',
+            answer:
+                'Each day you make an entry or check in with your weather forecast, your streak will increase by one. If you miss a day, your streak resets to zero. '
+                'Keeping a consistent streak helps your virtual plant grow!',
+          ),
           const SizedBox(height: 40),
         ],
       ),
     );
   }
 
-  ///
+  //reusable help card
   Widget _helpCard(
     BuildContext context, {
     required IconData icon,

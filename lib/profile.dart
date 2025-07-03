@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
+//profile page of user details
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -22,6 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> loadProfile() async {
+    //get profile infro from shared prefs
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       name = prefs.getString('profileName') ?? 'Your Name';
@@ -30,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
           prefs.getString('dateJoined') ??
           DateFormat('MMMM d, y').format(DateTime.now());
       streak = prefs.getInt('streak') ?? 0;
-    });
+    }); //save date joined if not there yet
     if (!prefs.containsKey('dateJoined')) {
       prefs.setString(
         'dateJoined',
@@ -40,28 +42,54 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _changeName() async {
+    //change name
     final newName = await showDialog<String>(
       context: context,
       builder: (context) {
         final controller = TextEditingController(text: name);
         return AlertDialog(
           backgroundColor: const Color(0xFFFFFBF0),
-          title: const Text('Change your name'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            'Change your name',
+            style: TextStyle(
+              color: Color(0xFF695E50),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           content: TextField(
             controller: controller,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Enter a new name',
-              border: OutlineInputBorder(),
+              filled: true,
+              fillColor: const Color(0xFFFCF2E0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 14,
+                horizontal: 16,
+              ),
             ),
+            style: const TextStyle(color: Color(0xFF4A4032)),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Color(0xFF695E50)),
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF695E50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
               onPressed: () {
                 Navigator.pop(context, controller.text.trim());
@@ -114,9 +142,22 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(backgroundImage: AssetImage(avatar), radius: 60),
+              Container(
+                //avatar w border
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: const Color(0xFF4A4032), width: 4),
+                ),
+                child: CircleAvatar(
+                  backgroundImage: AssetImage(avatar),
+                  radius: 80,
+                ),
+              ),
+
               const SizedBox(height: 20),
               Text(
+                //name
                 name,
                 style: const TextStyle(
                   fontSize: 26,
@@ -126,6 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               const SizedBox(height: 6),
               Text(
+                //join date
                 'Joined $dateJoined',
                 style: const TextStyle(fontSize: 14, color: Color(0xFF4A4032)),
               ),
@@ -140,6 +182,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
+                  //streak
                   'Current streak: $streak days',
                   style: const TextStyle(
                     fontSize: 16,
@@ -187,10 +230,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               const SizedBox(height: 30),
-              const Text(
-                'More profile features coming soon...',
-                style: TextStyle(color: Color(0xFF4A4032)),
-              ),
             ],
           ),
         ),

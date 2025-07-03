@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:interactive_journal/journal_entry.dart';
 
+//settings page
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -11,7 +12,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool remindersEnabled = true;
+  bool remindersEnabled = true; //default
 
   @override
   void initState() {
@@ -20,6 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> loadSettings() async {
+    //load reminder toggle from prefs
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       remindersEnabled = prefs.getBool('remindersEnabled') ?? true;
@@ -27,6 +29,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> toggleReminders(bool value) async {
+    //toggle reminder
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('remindersEnabled', value);
     setState(() {
@@ -35,6 +38,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> clearData() async {
+    //clear journal entries
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
 
@@ -49,13 +53,13 @@ class _SettingsPageState extends State<SettingsPage> {
   void exportData() {
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('Data exported (demo only)')));
+    ).showSnackBar(const SnackBar(content: Text('Data exported (demo)')));
   }
 
   void importData() {
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('Data imported (demo only)')));
+    ).showSnackBar(const SnackBar(content: Text('Data imported (demo)')));
   }
 
   @override
@@ -81,7 +85,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             const SizedBox(height: 10),
 
-            //reminders
+            //reminders switch
             Container(
               decoration: BoxDecoration(
                 color: const Color(0xFFFFFBF0),

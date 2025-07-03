@@ -8,12 +8,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'mood_checkin_page.dart';
 
+//homepage
+//decides if to show checkin todya or not
 Future<bool> shouldShowCheckIn() async {
   final prefs = await SharedPreferences.getInstance();
   final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
   final lastCheckIn = prefs.getString('lastCheckIn');
 
-  // for testing!!:
+  //for testing!!:
   return true;
 
   if (lastCheckIn == today) return false;
@@ -33,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   late List<Widget> _pages;
 
-  String windowImage = 'assets/sunny_window.png'; // default weather
+  String windowImage = 'assets/sunny_window.png'; //default weather
 
   @override
   void initState() {
@@ -51,6 +53,7 @@ class _HomePageState extends State<HomePage> {
       const GardenPage(),
       const ProfilePage(),
     ];
+    //show mood checkin first
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (await shouldShowCheckIn()) {
         final selectedImage = await Navigator.of(context).push<String>(
@@ -84,7 +87,8 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFFCF2E0),
         elevation: 0,
-        automaticallyImplyLeading: false, // disable default hamburger
+        scrolledUnderElevation: 0,
+        automaticallyImplyLeading: false, //disable default hamburger
         leading: Padding(
           padding: const EdgeInsets.only(top: 12.0, left: 8.0),
           child: Builder(
@@ -103,22 +107,25 @@ class _HomePageState extends State<HomePage> {
 
       drawer: const AppDrawer(),
       body: SafeArea(
+        //show current page
         child:
             _selectedIndex == 0
-                ? buildHomePageContent()
+                ? SingleChildScrollView(child: buildHomePageContent())
                 : _pages[_selectedIndex],
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color(0xFFFCF2E0),
         currentIndex: _selectedIndex,
         onTap: (i) async {
           if (i == 2) {
+            //new entry uses full page instead
             final result = await Navigator.of(context).push(
               PageRouteBuilder(
                 pageBuilder:
                     (_, __, ___) => NewEntryPage(
                       onSave: () {
-                        Navigator.of(context).pop(); // close after save
+                        Navigator.of(context).pop(); //close after save
                       },
                     ),
                 transitionsBuilder: (_, animation, __, child) {
@@ -175,13 +182,15 @@ class _HomePageState extends State<HomePage> {
             color: Color(0xFF695E50),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
         Padding(
+          //show window with selected weather
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Image.asset(windowImage, fit: BoxFit.cover),
         ),
-        const SizedBox(height: 60),
+        const SizedBox(height: 40),
         Column(
+          //table for plant
           children: [
             Container(height: 55, color: const Color(0xFFcfc2ab)),
             Container(height: 20, color: const Color(0xFFb1a691)),
@@ -189,6 +198,7 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(height: 24),
         Container(
+          //streak box
           width: 200,
           margin: const EdgeInsets.symmetric(horizontal: 40),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),

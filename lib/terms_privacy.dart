@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//terms info page
 class TermsPrivacyPage extends StatelessWidget {
   const TermsPrivacyPage({super.key});
 

@@ -4,6 +4,7 @@ import 'package:interactive_journal/about.dart';
 import 'package:interactive_journal/settings.dart';
 import 'package:interactive_journal/help.dart';
 
+//hamburger menu
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
 
@@ -15,6 +16,7 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           Container(
+            //banner at top of menu
             height: 160,
             decoration: const BoxDecoration(
               color: Color(0xFFBFAF90),

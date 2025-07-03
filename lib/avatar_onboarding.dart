@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// second bit of onboarding to pick avatar
 class AvatarOnboardingPage extends StatefulWidget {
   final String userName;
 
@@ -13,12 +14,13 @@ class AvatarOnboardingPage extends StatefulWidget {
 class _AvatarOnboardingPageState extends State<AvatarOnboardingPage> {
   String selectedAvatar = 'assets/avatar1.png';
 
+  //saves avatar and name in shared preferences
   Future<void> _completeProfile() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('profileName', widget.userName);
     await prefs.setString('profileAvatar', selectedAvatar);
 
-    Navigator.pushReplacementNamed(context, '/home');
+    Navigator.pushReplacementNamed(context, '/home'); //goes to homepage
   }
 
   Widget _avatarOption(String path) {
@@ -67,6 +69,7 @@ class _AvatarOnboardingPageState extends State<AvatarOnboardingPage> {
             children: [
               const SizedBox(height: 10),
               Text(
+                //choose avatar and shows chosen name
                 'Choose your avatar, ${widget.userName}!',
                 style: const TextStyle(
                   fontSize: 22,
@@ -90,6 +93,7 @@ class _AvatarOnboardingPageState extends State<AvatarOnboardingPage> {
               ),
               const SizedBox(height: 40),
               SizedBox(
+                //confirm button
                 width: 200,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
