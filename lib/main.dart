@@ -8,9 +8,11 @@ import 'journal_entry.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  //get shared prefs to check if rofile exists
   final prefs = await SharedPreferences.getInstance();
   final hasProfile = prefs.getBool('hasProfile') ?? false;
 
+  //setup hive
   await Hive.initFlutter();
   Hive.registerAdapter(JournalEntryAdapter());
   await Hive.openBox<JournalEntry>('journalEntries');
@@ -26,6 +28,7 @@ class JournalApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      //if user has profile saved, go home otherwise show onboarding
       home: hasProfile ? const HomePage() : const NameOnboardingPage(),
       routes: {'/home': (context) => const HomePage()},
     );
