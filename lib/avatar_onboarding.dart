@@ -9,7 +9,7 @@ class AvatarOnboardingPage extends StatefulWidget {
   AvatarOnboardingPage({
     super.key,
     required this.userName,
-    this.isChangingAvatar = false, // add this
+    this.isChangingAvatar = false,
   });
 
   @override
@@ -29,7 +29,7 @@ class _AvatarOnboardingPageState extends State<AvatarOnboardingPage> {
     await prefs.setBool('hasProfile', true);
 
     if (widget.isChangingAvatar) {
-      Navigator.pop(context, selectedAvatar); // return avatar to profile
+      Navigator.pop(context, selectedAvatar); //return avatar to profile
     } else {
       Navigator.pushReplacementNamed(context, '/home');
     }

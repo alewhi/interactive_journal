@@ -32,11 +32,11 @@ class HelpPage extends StatelessWidget {
             context,
             icon: Icons.email,
             title: 'Contact Support',
-            subtitle: 'support@myjournalapp.com',
+            subtitle: 'support@sprout.com',
             onTap: () async {
               final Uri emailLaunchUri = Uri(
                 scheme: 'mailto',
-                path: 'support@myjournalapp.com',
+                path: 'support@sprout.com',
                 query: 'subject=App Support Inquiry',
               );
               if (await canLaunchUrl(emailLaunchUri)) {
@@ -154,7 +154,7 @@ class HelpPage extends StatelessWidget {
     );
   }
 
-  /// reusable accordion for FAQs
+  //reusable accordion for FAQs
   Widget _styledExpansion({required String question, required String answer}) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),

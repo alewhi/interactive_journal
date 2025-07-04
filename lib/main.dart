@@ -10,7 +10,7 @@ void main() async {
 
   //get shared prefs to check if rofile exists
   final prefs = await SharedPreferences.getInstance();
-  //wait prefs.clear(); //!!!!! for testing and demo - uncomment to reset whole app
+  //await prefs.clear(); //!!!!! for testing and demo - uncomment to reset whole app
   await prefs.remove(
     'lastCheckIn',
   ); //!!!!! for demo - uncomment for skip day, comment for real time

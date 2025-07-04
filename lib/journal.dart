@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:interactive_journal/journal_entry.dart';
 import 'package:interactive_journal/mood_checkin_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:interactive_journal/prompts.dart';
 
 //journal page with entries, promts, forecats, new entry etc
 class JournalPage extends StatefulWidget {
@@ -263,7 +264,11 @@ class _JournalPageState extends State<JournalPage> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        //
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const PromptsPage(),
+                          ),
+                        );
                       },
                       child: Container(
                         height: 150,
@@ -420,15 +425,17 @@ class _JournalPageState extends State<JournalPage> {
                       );
                     }
 
-                    //entries most recent first
-                    final entries = box.values.toList().reversed.toList();
+                    final entries =
+                        box.values
+                            .toList()
+                            .reversed
+                            .toList(); //entries most recent first
 
-                    //apply search
                     final filteredEntries =
                         entries.where((entry) {
                           final query = _searchQuery.toLowerCase();
                           return entry.title.toLowerCase().contains(query);
-                        }).toList();
+                        }).toList(); //apply search
 
                     if (filteredEntries.isEmpty) {
                       return Center(

@@ -14,6 +14,12 @@ class _GardenPageState extends State<GardenPage> {
   late PageController _pageController;
   int _currentPage = 0;
 
+  final Map<String, String> plantNicknames = {
+    //change to nicknames w/out altering how plants are saved in prefs
+    'flower': 'Petal Pip',
+    'sunflower': 'Sunny Bob',
+  };
+
   @override
   void initState() {
     super.initState();
@@ -145,13 +151,11 @@ class _GardenPageState extends State<GardenPage> {
                     ),
                   ),
 
-                  // current plant name
+                  //current plant name
                   Text(
                     _plants.isNotEmpty
-                        ? _plants[_currentPage].replaceFirst(
-                          _plants[_currentPage][0],
-                          _plants[_currentPage][0].toUpperCase(),
-                        )
+                        ? plantNicknames[_plants[_currentPage]] ??
+                            _plants[_currentPage]
                         : '',
                     style: const TextStyle(
                       fontSize: 20,
@@ -160,7 +164,7 @@ class _GardenPageState extends State<GardenPage> {
                     ),
                   ),
 
-                  // right arrow
+                  //right arrow
                   GestureDetector(
                     onTap:
                         _currentPage < _plants.length - 1
@@ -183,7 +187,7 @@ class _GardenPageState extends State<GardenPage> {
               ),
             ),
 
-            // title
+            //title
             const Positioned(
               top: 20,
               left: 24,

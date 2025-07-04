@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'mood_checkin_page.dart';
 
 //homepage
-//decides if to show checkin todya or not
+//decides if to show checkin today or not
 Future<bool> shouldShowCheckIn() async {
   final prefs = await SharedPreferences.getInstance();
   final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -17,12 +17,12 @@ Future<bool> shouldShowCheckIn() async {
 
   if (lastCheckIn == today) return false;
 
-  // new check-in day
+  //new check-in day
   int streak = (prefs.getInt('streak') ?? 0) + 1;
   await prefs.setInt('streak', streak);
   await prefs.setString('lastCheckIn', today);
 
-  // every 5 days, grow the plant
+  //every 5 days grow the plant
   if (streak % 5 == 0) {
     int stage = prefs.getInt('plantStage') ?? 0;
     stage++;
@@ -39,7 +39,7 @@ Future<void> updatePlantStage() async {
 
   final streak = prefs.getInt('streak') ?? 0;
 
-  // grows every 5 days
+  //grows every 5 days
   final newStage = (streak ~/ 5).clamp(0, 3); // max stage 3
   await prefs.setInt('plantStage', newStage);
 }
@@ -124,17 +124,34 @@ class _HomePageState extends State<HomePage> {
 
       final chosenPlant = prefs.getString('chosenPlant');
       if (chosenPlant == null) {
-        //show prompt to tap pot
         await showDialog(
           context: context,
           builder:
               (_) => AlertDialog(
-                title: const Text("Welcome!"),
+                backgroundColor: const Color(0xFFFFFBF0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                title: const Text(
+                  "Welcome!",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF695E50),
+                  ),
+                ),
                 content: const Text(
-                  "Tap on the plant pot to choose your first plant!",
+                  "Tap on the plant pot to choose your first plant.",
+                  style: TextStyle(color: Color(0xFF695E50), fontSize: 16),
                 ),
                 actions: [
                   TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: const Color(0xFF695E50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
                     onPressed: () => Navigator.pop(context),
                     child: const Text("Perfect!"),
                   ),
@@ -142,6 +159,7 @@ class _HomePageState extends State<HomePage> {
               ),
         );
       }
+
       await updatePlantStage();
       setState(() {});
     });
@@ -156,35 +174,78 @@ class _HomePageState extends State<HomePage> {
       final plant = await showDialog<String>(
         context: context,
         builder:
-            (context) => AlertDialog(
-              title: const Text('Choose your starter plant'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Image.asset(
-                      'assets/flower_stage1.png',
-                      height: 40,
+            (context) => Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              backgroundColor: const Color(0xFFFFFBF0),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Choose Your Starter Plant',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF695E50),
+                      ),
                     ),
-                    title: const Text('Flower'),
-                    onTap: () => Navigator.pop(context, 'flower'),
-                  ),
-                  ListTile(
-                    leading: Image.asset(
-                      'assets/sunflower_stage1.png',
-                      height: 40,
+                    const SizedBox(height: 16),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Image.asset(
+                        'assets/flower_stage4.png',
+                        height: 40,
+                      ),
+                      title: const Text(
+                        'Petal Pip',
+                        style: TextStyle(
+                          color: Color(0xFF695E50),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () => Navigator.pop(context, 'flower'),
                     ),
-                    title: const Text('sunflower'),
-                    onTap: () => Navigator.pop(context, 'sunflower'),
-                  ),
-                ],
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Image.asset(
+                        'assets/sunflower_stage4.png',
+                        height: 40,
+                      ),
+                      title: const Text(
+                        'Sunny Bob',
+                        style: TextStyle(
+                          color: Color(0xFF695E50),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () => Navigator.pop(context, 'sunflower'),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF695E50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
       );
 
       if (plant != null) {
         await prefs.setString('chosenPlant', plant);
-        await prefs.setInt('plantStage', 0); // start at stage 0
+        await prefs.setInt('plantStage', 0); //start at stage 0 (sprout)
         setState(() {});
       }
     }
@@ -252,7 +313,7 @@ class _HomePageState extends State<HomePage> {
           }
 
           if (i == 0) {
-            //back to home, force window change
+            //back to home. force window change
             final prefs = await SharedPreferences.getInstance();
             final savedWindow = prefs.getString('windowImage');
             if (savedWindow != null) {
@@ -314,7 +375,7 @@ class _HomePageState extends State<HomePage> {
           clipBehavior: Clip.none,
           alignment: Alignment.bottomCenter,
           children: [
-            // table
+            // table floor
             Column(
               children: [
                 Container(height: 55, color: const Color(0xFFcfc2ab)),
@@ -322,6 +383,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
 
+            // plant pot and flower
             Positioned(
               bottom: 35,
               child: GestureDetector(
@@ -329,9 +391,10 @@ class _HomePageState extends State<HomePage> {
                 child: Stack(
                   alignment: Alignment.bottomCenter,
                   children: [
+                    // the pot
                     Image.asset('assets/plantpot.png', height: 265),
 
-                    // flower overlay
+                    // the flower
                     FutureBuilder<SharedPreferences>(
                       future: SharedPreferences.getInstance(),
                       builder: (context, snapshot) {
@@ -351,50 +414,58 @@ class _HomePageState extends State<HomePage> {
                           return const SizedBox.shrink();
                         }
 
-                        //if fully grown, show button under the plant
-                        if (stage == stages.length - 1) {
-                          return Column(
-                            children: [
-                              Image.asset(stages[stage], height: 265),
-                              const SizedBox(height: 8),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF695E50),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  final garden =
-                                      prefs.getStringList('garden') ?? [];
-                                  garden.add(chosenPlant);
-                                  await prefs.setStringList('garden', garden);
-                                  await prefs.remove('chosenPlant');
-                                  await prefs.setInt('plantStage', 0);
-                                  await prefs.setInt('streak', 0);
-                                  setState(() {});
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Plant moved to garden!'),
-                                    ),
-                                  );
-                                },
-                                child: const Text(
-                                  'Move to Garden',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          );
-                        }
-
-                        // otherwise show current stage
                         return Image.asset(stages[stage], height: 265);
                       },
                     ),
                   ],
                 ),
               ),
+            ),
+
+            //move to garden button
+            FutureBuilder<SharedPreferences>(
+              future: SharedPreferences.getInstance(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const SizedBox.shrink();
+                final prefs = snapshot.data!;
+                final chosenPlant = prefs.getString('chosenPlant');
+                final stage = prefs.getInt('plantStage') ?? 0;
+
+                if (chosenPlant == null) return const SizedBox.shrink();
+                final stages = plantStages[chosenPlant];
+                if (stages != null && stage == stages.length - 1) {
+                  return Positioned(
+                    bottom: 0,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF695E50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      onPressed: () async {
+                        final garden = prefs.getStringList('garden') ?? [];
+                        garden.add(chosenPlant);
+                        await prefs.setStringList('garden', garden);
+                        await prefs.remove('chosenPlant');
+                        await prefs.setInt('plantStage', 0);
+                        await prefs.setInt('streak', 0);
+                        setState(() {});
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Plant moved to garden!'),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Move to Garden',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
             ),
           ],
         ),

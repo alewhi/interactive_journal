@@ -33,7 +33,7 @@ class AboutPage extends StatelessWidget {
               const SizedBox(height: 10),
               const Center(
                 child: Text(
-                  'About ------',
+                  'About Sprout',
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -56,20 +56,18 @@ class AboutPage extends StatelessWidget {
                   ],
                 ),
                 padding: const EdgeInsets.all(16),
-                child: const Text(
-                  '[name] is a peaceful, interactive journaling experience designed to help you reflect on your thoughts, nurture your mental well-being, and grow over time. Each entry you make helps your personal garden flourish, blending mindful habits with fun.\n\n'
-                  'Whether you’re writing about your day, tracking your mood, or simply capturing moments, [name] provides a safe, private space to explore your emotions and celebrate your growth.\n\n'
-                  '• Private & Secure: All your journal entries are stored on your own device.\n'
-                  '• No account needed: Focus on your personal journey without worrying about logins or social sharing.\n'
-                  '• Grow your garden: Check in daily to see your virtual garden grow.\n'
-                  '• Simple & calming design: Built to encourage peaceful, mindful reflection.\n\n'
-                  'If you ever need help, visit the Help section or get in touch with us at (email)).',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF4A4032),
-                    height: 1.5,
-                  ),
-                ),
+                child: const Text('''
+Sprout is a calm yet powerful interactive journalling app that helps you capture notes, organise ideas, reflect on your thoughts, and build productive habits — all while watching your plants grow. Each streak nurtures your virtual garden, blending mindful reflection with fun motivation to keep you writing, thinking, and achieving your goals.
+
+Whether you’re journalling about your day, making plans, setting intentions, or recording quick notes, Sprout turns your thoughts into growth.
+
+• Private & Secure: All your journal entries are stored on your own device.
+• No account needed: Focus on your personal journey without worrying about logins or social sharing.
+• Grow your garden: Check in daily to see your virtual garden grow.
+• Simple & calming design: Built to encourage peaceful, mindful reflection.
+
+If you ever need help, visit the Help section or get in touch with us at support@sprout.com.
+  ''', style: TextStyle(fontSize: 16, color: Color(0xFF4A4032), height: 1.5)),
               ),
 
               const SizedBox(height: 24),
@@ -146,7 +144,10 @@ class AboutPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 8),
-                    Text('email', style: TextStyle(color: Color(0xFF4A4032))),
+                    Text(
+                      'support@sprout.com',
+                      style: TextStyle(color: Color(0xFF4A4032)),
+                    ),
                   ],
                 ),
               ),

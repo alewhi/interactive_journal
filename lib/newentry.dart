@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:hive/hive.dart';
+import 'package:interactive_journal/prompts.dart';
 
 //create or edit entry page
 class NewEntryPage extends StatefulWidget {
@@ -173,7 +174,9 @@ class _NewEntryPageState extends State<NewEntryPage> {
                   flex: 1,
                   child: GestureDetector(
                     onTap: () {
-                      //pick prompt??
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const PromptsPage()),
+                      );
                     },
                     child: Container(
                       height: 48,

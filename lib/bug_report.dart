@@ -157,7 +157,7 @@ class _BugReportPageState extends State<BugReportPage> {
           const SizedBox(height: 30),
           Center(
             child: Text(
-              'Thank you for helping us improve! 🌿',
+              'Thank you for helping Sprout improve! 🌿',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,

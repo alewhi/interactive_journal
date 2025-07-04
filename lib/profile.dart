@@ -24,7 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> loadProfile() async {
-    //get profile infro from shared prefs
+    //get profile info from shared prefs
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       name = prefs.getString('profileName') ?? 'Your Name';
