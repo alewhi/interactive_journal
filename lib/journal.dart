@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:interactive_journal/newentry.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:interactive_journal/journal_entry.dart';
+import 'package:interactive_journal/mood_checkin_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //journal page with entries, promts, forecats, new entry etc
 class JournalPage extends StatefulWidget {
@@ -213,34 +215,50 @@ class _JournalPageState extends State<JournalPage> {
               Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      height: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        image: const DecorationImage(
-                          image: AssetImage('assets/mood_box.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 6,
-                            offset: Offset(0, 3),
+                    child: GestureDetector(
+                      onTap: () async {
+                        final result = await Navigator.of(context).push<String>(
+                          MaterialPageRoute(
+                            builder: (_) => const MoodCheckInPage(),
                           ),
-                        ],
-                      ),
+                        );
 
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'Forecast',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Color(0xFF695E50),
-                          fontWeight: FontWeight.w800,
+                        if (result != null) {
+                          // update the shared preferences w new mood
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setString('windowImage', result);
+                        }
+                      },
+
+                      child: Container(
+                        height: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          image: const DecorationImage(
+                            image: AssetImage('assets/mood_box.png'),
+                            fit: BoxFit.cover,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 6,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Forecast',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Color(0xFF695E50),
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ),
                     ),
                   ),
+
                   const SizedBox(width: 16),
                   Expanded(
                     child: GestureDetector(

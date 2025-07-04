@@ -4,8 +4,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 // second bit of onboarding to pick avatar
 class AvatarOnboardingPage extends StatefulWidget {
   final String userName;
+  final bool isChangingAvatar;
 
-  const AvatarOnboardingPage({super.key, required this.userName});
+  AvatarOnboardingPage({
+    super.key,
+    required this.userName,
+    this.isChangingAvatar = false, // add this
+  });
 
   @override
   State<AvatarOnboardingPage> createState() => _AvatarOnboardingPageState();
@@ -17,10 +22,17 @@ class _AvatarOnboardingPageState extends State<AvatarOnboardingPage> {
   //saves avatar and name in shared preferences
   Future<void> _completeProfile() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('profileName', widget.userName);
+    if (!widget.isChangingAvatar) {
+      await prefs.setString('profileName', widget.userName);
+    }
     await prefs.setString('profileAvatar', selectedAvatar);
+    await prefs.setBool('hasProfile', true);
 
-    Navigator.pushReplacementNamed(context, '/home'); //goes to homepage
+    if (widget.isChangingAvatar) {
+      Navigator.pop(context, selectedAvatar); // return avatar to profile
+    } else {
+      Navigator.pushReplacementNamed(context, '/home');
+    }
   }
 
   Widget _avatarOption(String path) {
@@ -105,7 +117,7 @@ class _AvatarOnboardingPageState extends State<AvatarOnboardingPage> {
                   ),
                   onPressed: _completeProfile,
                   child: const Text(
-                    'Get Started',
+                    'Happy!',
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),

@@ -29,7 +29,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/splash_logo.png
     - assets/sunny_window.png
     - assets/rainy_window.png
     - assets/overcast_window.png
@@ -49,9 +48,18 @@ flutter:
     - assets/avatar4.png
     - assets/avatar5.png
     - assets/avatar_load.png
+    - assets/plantpot.png
+    - assets/flower_stage1.png
+    - assets/flower_stage2.png
+    - assets/flower_stage3.png
+    - assets/flower_stage4.png
+    - assets/sunflower_stage1.png
+    - assets/sunflower_stage2.png
+    - assets/sunflower_stage3.png
+    - assets/sunflower_stage4.png
 
 flutter_native_splash:
   color: "#fbf1e0"
-  image: assets/splash_logo.png
+  image: assets/app_logo.png
   android: true
   ios: true

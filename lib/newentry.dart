@@ -18,7 +18,7 @@ class NewEntryPage extends StatefulWidget {
 }
 
 class _NewEntryPageState extends State<NewEntryPage> {
-  List<File> _selectedImages = [];
+  final List<File> _selectedImages = [];
   Color _selectedColor = const Color(0xFFFCF2E0); //default
   late TextEditingController _titleController;
   late TextEditingController _contentController;
@@ -39,7 +39,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
     final box = Hive.box<JournalEntry>('journalEntries');
     final title = _titleController.text.trim();
     final content = _contentController.text.trim();
-    final color = 0xFFEADFC8; //fallback colour
+    final color = _selectedColor.value;
 
     if (title.isEmpty || content.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -66,8 +66,11 @@ class _NewEntryPageState extends State<NewEntryPage> {
       box.add(entry);
     }
 
-    widget.onSave?.call();
-    Navigator.pop(context);
+    if (widget.onSave != null) {
+      widget.onSave!();
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   //choose colour circle options
@@ -156,7 +159,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                       ],
                     ),
                     child: Text(
-                      '$formattedDate',
+                      formattedDate,
                       style: const TextStyle(
                         fontSize: 18,
                         color: Color(0xFF695E50),

@@ -10,11 +10,18 @@ void main() async {
 
   //get shared prefs to check if rofile exists
   final prefs = await SharedPreferences.getInstance();
+  //wait prefs.clear(); //!!!!! for testing and demo - uncomment to reset whole app
+  await prefs.remove(
+    'lastCheckIn',
+  ); //!!!!! for demo - uncomment for skip day, comment for real time
   final hasProfile = prefs.getBool('hasProfile') ?? false;
+  print('DEBUG hasProfile = $hasProfile');
 
-  //setup hive
-  await Hive.initFlutter();
+  await Hive.initFlutter(); //setup hive
   Hive.registerAdapter(JournalEntryAdapter());
+
+  //final box = await Hive.openBox<JournalEntry>('journalEntries');
+  //await box.clear(); // reset journal entries in hive for demo
   await Hive.openBox<JournalEntry>('journalEntries');
   runApp(JournalApp(hasProfile: hasProfile));
 }

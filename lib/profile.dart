@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:interactive_journal/avatar_onboarding.dart';
 
 //profile page of user details
 class ProfilePage extends StatefulWidget {
@@ -111,24 +112,20 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _changeAvatar() async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: const Color(0xFFFFFBF0),
-          title: const Text('Change your avatar'),
-          content: const Text('This feature will be coming soon!'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
+    final pickedAvatar = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder:
+            (context) =>
+                AvatarOnboardingPage(userName: name, isChangingAvatar: true),
+      ),
     );
-    if (confirm ?? false) {
-      //change avatar
+
+    if (pickedAvatar != null && pickedAvatar.isNotEmpty) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('profileAvatar', pickedAvatar);
+      setState(() {
+        avatar = pickedAvatar;
+      });
     }
   }
 

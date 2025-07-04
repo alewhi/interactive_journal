@@ -108,7 +108,7 @@ class HelpPage extends StatelessWidget {
             question: 'How do streaks work?',
             answer:
                 'Each day you make an entry or check in with your weather forecast, your streak will increase by one. If you miss a day, your streak resets to zero. '
-                'Keeping a consistent streak helps your virtual plant grow!',
+                'Keeping a consistent streak helps your virtual plant grow! For every 5 days, your plant will grow.',
           ),
           const SizedBox(height: 40),
         ],
