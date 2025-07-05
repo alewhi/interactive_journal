@@ -36,12 +36,58 @@ class JournalEntryDetail extends StatelessWidget {
           IconButton(
             //delete button
             icon: const Icon(Icons.delete),
-            onPressed: () {
-              entry.delete(); //delete from hive
-              Navigator.pop(context);
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('Entry deleted')));
+            onPressed: () async {
+              final confirmed = await showDialog<bool>(
+                context: context,
+                builder:
+                    (context) => AlertDialog(
+                      backgroundColor: const Color(0xFFFFFBF0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      title: const Text(
+                        'Delete Entry',
+                        style: TextStyle(
+                          color: Color(0xFF695E50),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      content: const Text(
+                        'Are you sure you want to delete this entry? This cannot be undone.',
+                        style: TextStyle(color: Color(0xFF4A4032)),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(color: Color(0xFF695E50)),
+                          ),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF695E50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () => Navigator.pop(context, true),
+                          child: const Text(
+                            'Delete',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+              );
+
+              if (confirmed == true) {
+                entry.delete();
+                Navigator.pop(context);
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text('Entry deleted')));
+              }
             },
           ),
         ],
@@ -108,17 +154,14 @@ class JournalEntryDetail extends StatelessWidget {
             ElevatedButton.icon(
               //edit button
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder:
-                        (_) => NewEntryPage(
-                          existingEntry: entry,
-                          onSave: () => Navigator.pop(context),
-                        ),
+                    builder: (_) => NewEntryPage(existingEntry: entry),
                   ),
                 );
               },
+
               icon: const Icon(Icons.edit, color: Colors.white),
               label: const Text('Edit', style: TextStyle(color: Colors.white)),
               style: ElevatedButton.styleFrom(

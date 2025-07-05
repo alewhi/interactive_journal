@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'bug_report.dart';
 import 'terms_privacy.dart';
+import 'tutorial.dart';
 import 'package:url_launcher/url_launcher.dart'; // for contact support
 
 //help page w faqs
@@ -28,6 +29,49 @@ class HelpPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(24.0),
         children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TutorialPage()),
+              );
+            },
+            child: Container(
+              alignment: Alignment.center,
+              height: 120,
+              margin: const EdgeInsets.only(bottom: 20),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFFBF0),
+                borderRadius: BorderRadius.circular(16),
+                image: const DecorationImage(
+                  image: AssetImage('assets/mood_background.png'),
+                  fit: BoxFit.fill,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  SizedBox(width: 8),
+                  Text(
+                    'Tutorial',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF695E50),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
           _helpCard(
             context,
             icon: Icons.email,
@@ -53,7 +97,7 @@ class HelpPage extends StatelessWidget {
             context,
             icon: Icons.bug_report,
             title: 'Report a Problem',
-            subtitle: 'Tell us if something went wrong',
+            subtitle: 'Tell us what went wrong',
             onTap: () {
               Navigator.push(
                 context,
@@ -157,6 +201,7 @@ class HelpPage extends StatelessWidget {
   //reusable accordion for FAQs
   Widget _styledExpansion({required String question, required String answer}) {
     return Card(
+      color: const Color(0xFFFFFBF0),
       margin: const EdgeInsets.symmetric(vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 2,

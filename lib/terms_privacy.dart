@@ -7,9 +7,9 @@ class TermsPrivacyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3E8E1),
+      backgroundColor: const Color(0xFFFCF2E0),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF3E8E1),
+        backgroundColor: const Color(0xFFFCF2E0),
         elevation: 0,
         iconTheme: const IconThemeData(color: Color(0xFF695E50), size: 36),
         title: const Text(

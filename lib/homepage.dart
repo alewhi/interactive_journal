@@ -13,16 +13,31 @@ import 'mood_checkin_page.dart';
 Future<bool> shouldShowCheckIn() async {
   final prefs = await SharedPreferences.getInstance();
   final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
-  final lastCheckIn = prefs.getString('lastCheckIn');
+  final lastCheckInStr = prefs.getString('lastCheckIn');
 
-  if (lastCheckIn == today) return false;
+  if (lastCheckInStr == today) return false;
 
-  //new check-in day
-  int streak = (prefs.getInt('streak') ?? 0) + 1;
-  await prefs.setInt('streak', streak);
+  if (lastCheckInStr != null) {
+    final lastCheckInDate = DateFormat('yyyy-MM-dd').parse(lastCheckInStr);
+    final daysDifference = DateTime.now().difference(lastCheckInDate).inDays;
+
+    if (daysDifference > 1) {
+      // missed a day, reset streak
+      await prefs.setInt('streak', 1);
+    } else {
+      // continue streak
+      int streak = (prefs.getInt('streak') ?? 0) + 1;
+      await prefs.setInt('streak', streak);
+    }
+  } else {
+    // first check-in ever
+    await prefs.setInt('streak', 1);
+  }
+
   await prefs.setString('lastCheckIn', today);
 
-  //every 5 days grow the plant
+  // grow plant on multiples of 5
+  final streak = prefs.getInt('streak') ?? 0;
   if (streak % 5 == 0) {
     int stage = prefs.getInt('plantStage') ?? 0;
     stage++;
@@ -511,6 +526,27 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+        const SizedBox(height: 8),
+
+        FutureBuilder<SharedPreferences>(
+          future: SharedPreferences.getInstance(), //days eft until plant grows
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return const SizedBox();
+            final streak = snapshot.data!.getInt('streak') ?? 0;
+            final daysUntilNext =
+                5 - (streak % 5); //calculate how many days left
+            if (daysUntilNext == 0) return const SizedBox();
+            return Text(
+              '$daysUntilNext days until plant grows',
+              style: const TextStyle(
+                fontSize: 16,
+                color: Color(0xFF695E50),
+                fontWeight: FontWeight.w400,
+              ),
+            );
+          },
+        ),
+
         const SizedBox(height: 10),
       ],
     );

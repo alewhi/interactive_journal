@@ -3,6 +3,7 @@ import 'package:interactive_journal/homepage.dart';
 import 'package:interactive_journal/about.dart';
 import 'package:interactive_journal/settings.dart';
 import 'package:interactive_journal/help.dart';
+import 'package:interactive_journal/data_privacy.dart';
 
 //hamburger menu
 class AppDrawer extends StatelessWidget {
@@ -26,15 +27,15 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
             child: const Padding(
-              padding: EdgeInsets.fromLTRB(16, 40, 16, 16),
+              padding: EdgeInsets.fromLTRB(16, 38, 16, 18),
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  'Hello!',
+                  'Menu',
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 35,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 255, 249, 241),
+                    color: Color.fromARGB(255, 255, 251, 247),
                   ),
                 ),
               ),
@@ -87,6 +88,20 @@ class AppDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const HelpPage()),
+              );
+            },
+          ),
+          _buildDrawerItem(
+            icon: Icons.security,
+            label: 'Data & Privacy',
+            accentColor: const Color(0xFFA3B18A),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DataPrivacyPage(),
+                ),
               );
             },
           ),

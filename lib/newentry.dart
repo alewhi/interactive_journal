@@ -33,6 +33,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
     _contentController = TextEditingController(
       text: widget.existingEntry?.content ?? '',
     );
+    _selectedColor = Color(widget.existingEntry?.color ?? 0xFFFCF2E0);
   }
 
   void _saveEntry() async {
@@ -44,7 +45,6 @@ class _NewEntryPageState extends State<NewEntryPage> {
 
     if (title.isEmpty || content.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        //validation
         const SnackBar(content: Text('Please fill in all fields')),
       );
       return;
@@ -55,6 +55,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
       widget.existingEntry!
         ..title = title
         ..content = content
+        ..color = color
         ..save();
     } else {
       //creating new
@@ -67,11 +68,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
       box.add(entry);
     }
 
-    if (widget.onSave != null) {
-      widget.onSave!();
-    } else {
-      Navigator.pop(context);
-    }
+    Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   //choose colour circle options
