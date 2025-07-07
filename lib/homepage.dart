@@ -17,7 +17,7 @@ Future<bool> shouldShowCheckIn() async {
   final lastCheckInStr = prefs.getString('lastCheckIn');
   //end of adaptation
 
-  //uncomment for realtime check ins, comment for skip days to show plant growth
+  // IMPORTANT! uncomment for realtime check ins, comment for skip days to show plant growth
   if (lastCheckInStr == today) return false;
 
   if (lastCheckInStr != null) {
