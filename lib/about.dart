@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 //about screen w description, version and creds
-
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
 

@@ -145,7 +145,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
             const SizedBox(height: 20),
 
-            // clear data
+            //clear data
             Container(
               decoration: BoxDecoration(
                 color: const Color(0xFFFFFBF0),

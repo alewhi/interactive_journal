@@ -20,6 +20,7 @@ class _AvatarOnboardingPageState extends State<AvatarOnboardingPage> {
   String selectedAvatar = 'assets/avatar1.png';
 
   //saves avatar and name in shared preferences
+  //code adapted from GeeksForGeeks (2024)
   Future<void> _completeProfile() async {
     final prefs = await SharedPreferences.getInstance();
     if (!widget.isChangingAvatar) {
@@ -34,6 +35,7 @@ class _AvatarOnboardingPageState extends State<AvatarOnboardingPage> {
       Navigator.pushReplacementNamed(context, '/home');
     }
   }
+  //end of adaptation
 
   Widget _avatarOption(String path) {
     final isSelected = selectedAvatar == path;

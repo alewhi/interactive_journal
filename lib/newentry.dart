@@ -19,7 +19,7 @@ class NewEntryPage extends StatefulWidget {
 }
 
 class _NewEntryPageState extends State<NewEntryPage> {
-  final List<File> _selectedImages = [];
+  List<File> _selectedImages = [];
   Color _selectedColor = const Color(0xFFFCF2E0); //default
   late TextEditingController _titleController;
   late TextEditingController _contentController;
@@ -27,6 +27,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
   @override
   void initState() {
     super.initState();
+
     _titleController = TextEditingController(
       text: widget.existingEntry?.title ?? '',
     );
@@ -34,6 +35,12 @@ class _NewEntryPageState extends State<NewEntryPage> {
       text: widget.existingEntry?.content ?? '',
     );
     _selectedColor = Color(widget.existingEntry?.color ?? 0xFFFCF2E0);
+
+    if (widget.existingEntry != null) {
+      // preserve existing images
+      _selectedImages =
+          widget.existingEntry!.imagePaths.map((path) => File(path)).toList();
+    }
   }
 
   void _saveEntry() async {
@@ -56,6 +63,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
         ..title = title
         ..content = content
         ..color = color
+        ..imagePaths = _selectedImages.map((f) => f.path).toList()
         ..save();
     } else {
       //creating new
@@ -64,11 +72,12 @@ class _NewEntryPageState extends State<NewEntryPage> {
         content: content,
         date: DateTime.now(),
         color: color,
+        imagePaths: _selectedImages.map((f) => f.path).toList(),
       );
       box.add(entry);
     }
 
-    Navigator.popUntil(context, (route) => route.isFirst);
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   //choose colour circle options

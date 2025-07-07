@@ -10,7 +10,7 @@ class NameOnboardingPage extends StatefulWidget {
 }
 
 class _NameOnboardingPageState extends State<NameOnboardingPage> {
-  final _nameController = TextEditingController(); //text input controller
+  final _nameController = TextEditingController(); //text input
 
   void _proceedToAvatar() {
     //validate and move to avatar page

@@ -125,11 +125,11 @@ class _GardenPageState extends State<GardenPage> {
               ),
             ),
 
-            //arrows + plant name
+            //arrows and plant names
             Positioned(
               left: 0,
               right: 0,
-              bottom: 40,
+              bottom: 100,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -151,7 +151,7 @@ class _GardenPageState extends State<GardenPage> {
                     ),
                   ),
 
-                  //current plant name
+                  //plant name
                   Text(
                     _plants.isNotEmpty
                         ? plantNicknames[_plants[_currentPage]] ??

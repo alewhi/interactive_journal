@@ -11,10 +11,13 @@ import 'mood_checkin_page.dart';
 //homepage
 //decides if to show checkin today or not
 Future<bool> shouldShowCheckIn() async {
+  //code adapted from Gorim (2024)
   final prefs = await SharedPreferences.getInstance();
   final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
   final lastCheckInStr = prefs.getString('lastCheckIn');
+  //end of adaptation
 
+  //uncomment for realtime check ins, comment for skip days to show plant growth
   if (lastCheckInStr == today) return false;
 
   if (lastCheckInStr != null) {
@@ -22,21 +25,21 @@ Future<bool> shouldShowCheckIn() async {
     final daysDifference = DateTime.now().difference(lastCheckInDate).inDays;
 
     if (daysDifference > 1) {
-      // missed a day, reset streak
+      //missed a day - reset streak
       await prefs.setInt('streak', 1);
     } else {
-      // continue streak
+      //continue streak
       int streak = (prefs.getInt('streak') ?? 0) + 1;
       await prefs.setInt('streak', streak);
     }
   } else {
-    // first check-in ever
+    //first check-in ever
     await prefs.setInt('streak', 1);
   }
 
   await prefs.setString('lastCheckIn', today);
 
-  // grow plant on multiples of 5
+  //grow plant in multiples of 5
   final streak = prefs.getInt('streak') ?? 0;
   if (streak % 5 == 0) {
     int stage = prefs.getInt('plantStage') ?? 0;
@@ -55,7 +58,7 @@ Future<void> updatePlantStage() async {
   final streak = prefs.getInt('streak') ?? 0;
 
   //grows every 5 days
-  final newStage = (streak ~/ 5).clamp(0, 3); // max stage 3
+  final newStage = (streak ~/ 5).clamp(0, 3); //(max stage 3)
   await prefs.setInt('plantStage', newStage);
 }
 
@@ -69,6 +72,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   late List<Widget> _pages;
+  bool _checkInDoneToday = false;
 
   String windowImage = 'assets/sunny_window.png'; //default weather
 
@@ -91,7 +95,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pages = [
-      Container(), //placeholder
+      Container(),
       const JournalPage(),
       NewEntryPage(
         onSave: () {
@@ -113,7 +117,11 @@ class _HomePageState extends State<HomePage> {
           windowImage = 'assets/$savedWindow';
         });
       }
-      if (await shouldShowCheckIn()) {
+      if (!_checkInDoneToday && await shouldShowCheckIn()) {
+        setState(() {
+          _checkInDoneToday = true;
+        });
+
         final selectedImage = await Navigator.of(context).push<String>(
           PageRouteBuilder(
             pageBuilder: (_, __, ___) => const MoodCheckInPage(),
@@ -130,6 +138,7 @@ class _HomePageState extends State<HomePage> {
         );
 
         if (selectedImage != null) {
+          final prefs = await SharedPreferences.getInstance();
           await prefs.setString('windowImage', selectedImage);
           setState(() {
             windowImage = 'assets/$selectedImage';
@@ -155,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 content: const Text(
-                  "Tap on the plant pot to choose your first plant.",
+                  "Tap anywhere on the table or plant pot to choose your first plant.",
                   style: TextStyle(color: Color(0xFF695E50), fontSize: 16),
                 ),
                 actions: [
@@ -340,7 +349,7 @@ class _HomePageState extends State<HomePage> {
 
           setState(() => _selectedIndex = i);
         },
-
+        //code adapted from Darji (2024)
         selectedItemColor: const Color(0xFF6D5D4B),
         unselectedItemColor: Colors.grey[600],
         selectedIconTheme: const IconThemeData(size: 39),
@@ -363,7 +372,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
+  } //end of adaptation
 
   Widget buildHomePageContent() {
     return Column(
@@ -378,7 +387,7 @@ class _HomePageState extends State<HomePage> {
             color: Color(0xFF695E50),
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
         Padding(
           //show window with selected weather
           padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -390,15 +399,15 @@ class _HomePageState extends State<HomePage> {
           clipBehavior: Clip.none,
           alignment: Alignment.bottomCenter,
           children: [
-            // table floor
+            //table
             Column(
               children: [
-                Container(height: 55, color: const Color(0xFFcfc2ab)),
+                Container(height: 50, color: const Color(0xFFcfc2ab)),
                 Container(height: 20, color: const Color(0xFFb1a691)),
               ],
             ),
 
-            // plant pot and flower
+            //plant pot
             Positioned(
               bottom: 35,
               child: GestureDetector(
@@ -406,10 +415,10 @@ class _HomePageState extends State<HomePage> {
                 child: Stack(
                   alignment: Alignment.bottomCenter,
                   children: [
-                    // the pot
+                    //the pot
                     Image.asset('assets/plantpot.png', height: 265),
 
-                    // the flower
+                    //flower
                     FutureBuilder<SharedPreferences>(
                       future: SharedPreferences.getInstance(),
                       builder: (context, snapshot) {
@@ -485,7 +494,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 14),
         Container(
           //streak box
           width: 220,
@@ -516,7 +525,7 @@ class _HomePageState extends State<HomePage> {
                   return Text(
                     'Streak: $streak days',
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF695E50),
                     ),
@@ -526,7 +535,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
 
         FutureBuilder<SharedPreferences>(
           future: SharedPreferences.getInstance(), //days eft until plant grows
